@@ -1,4 +1,5 @@
-﻿using Domain.Models.Orders;
+﻿using Domain.Models.FilteredOrders;
+using Domain.Models.Orders;
 using Infrastructure.Db.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ namespace Infrastructure.Db
     {
         public DbSet<Order> Orders { get; set; }
         public DbSet<District> Districts { get; set; }
+        public DbSet<FilteredResult> FilteredResults { get; set; }
 
         public OrderDbContext(DbContextOptions options) : base(options)
         {
