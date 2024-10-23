@@ -11,12 +11,12 @@ namespace Domain.Models
 
         public Order() { }
 
-        public Order(Guid uniqueNumber, int weight, DateTime deliveryTime, string districtName)
+        public Order(Guid uniqueNumber, int weight, DateTime deliveryTime, District district)
         {
             UniqueNumber = uniqueNumber;
             Weight = weight;
             DeliveryTime = deliveryTime;
-            District = new District(districtName);
+            District = district;
 
             Validate();
         }
