@@ -1,4 +1,5 @@
-﻿using Domain.Models.Orders;
+﻿using Domain.Models.FilteredOrders;
+using Domain.Models.Orders;
 using Infrastructure.Db;
 using Infrastructure.Db.Interface;
 using Infrastructure.Repositories;
@@ -21,6 +22,7 @@ namespace Infrastructure
 
             services.AddTransient<IDistrictRepository, DistrictRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<IFilteredResultRepository, FilteredResultRepository>();
 
             return services;
         }

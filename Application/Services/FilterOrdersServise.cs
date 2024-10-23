@@ -21,43 +21,45 @@ namespace Application.Services
 
         public async Task<List<Order>> Filter(FilterOrdersDTO filterOrdersDTO, CancellationToken cancellationToken)
         {
-            List<Order> closestOrders = await _orderRepository.GetCloseOrdersInHalfHourAsync(filterOrdersDTO.TimeAfterFirstOrder, filterOrdersDTO.DistrictName);
+            DateTime utfTime = DateTime.SpecifyKind(filterOrdersDTO.TimeAfterFirstOrder, DateTimeKind.Utc);
+
+            List<Order> closestOrders = await _orderRepository.GetCloseOrdersInHalfHourAsync(utfTime, filterOrdersDTO.DistrictName);
 
             FilteredResult filteredResult = await _filteredResultRepository.GetFilteredResultByDistrictNameAsync(filterOrdersDTO.DistrictName);
 
             if (filteredResult == null)
             {
-                await Create(filteredResult, filterOrdersDTO, _districtRepository, closestOrders, cancellationToken);
+                await Create(filterOrdersDTO.DistrictName, utfTime, _districtRepository, closestOrders, cancellationToken);
 
                 return closestOrders;
             }
             else
             {
-                await Update(filteredResult, closestOrders, cancellationToken);
+                await Update(filteredResult, utfTime, closestOrders, cancellationToken);
 
                 return closestOrders;
             }
         }
 
-        private async Task<long> Update(FilteredResult filteredResult, List<Order> closestOrders, CancellationToken cancellationToken)
+        private async Task<long> Update(FilteredResult filteredResult, DateTime time, List<Order> closestOrders, CancellationToken cancellationToken)
         {
-            filteredResult.Update(closestOrders, filteredResult.TimeAfterFirstOrder);
+            filteredResult.Update(closestOrders, time);
 
             long id = await _filteredResultRepository.UpdateAsync(filteredResult, cancellationToken);
 
             return id;
         }
 
-        private async Task<long> Create(FilteredResult filteredResult, FilterOrdersDTO filterOrdersDTO, IDistrictRepository districtRepository, List<Order> closestOrders, CancellationToken cancellationToken)
+        private async Task<long> Create(string districtName, DateTime time, IDistrictRepository districtRepository, List<Order> closestOrders, CancellationToken cancellationToken)
         {
-            District district = await districtRepository.GetByNameAsync(filterOrdersDTO.DistrictName);
+            District district = await districtRepository.GetByNameAsync(districtName);
 
             if (district == null)
             {
-                throw new DistrictNotFound(filterOrdersDTO.DistrictName);
+                throw new DistrictNotFound(districtName);
             }
 
-            filteredResult = new FilteredResult(filterOrdersDTO.TimeAfterFirstOrder, district, closestOrders);
+            FilteredResult filteredResult = new FilteredResult(time, district, closestOrders);
 
             await _filteredResultRepository.CreateAsync(filteredResult, cancellationToken);
 

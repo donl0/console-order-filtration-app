@@ -10,6 +10,8 @@ namespace Domain.Models.FilteredOrders
         public District District { get; private set; }
         public List<Order> Orders { get; private set; }
 
+        public FilteredResult() { }
+
         public FilteredResult(DateTime timeAfterFirstOrder, District district, List<Order> orders)
         {
             TimeAfterFirstOrder = timeAfterFirstOrder;
