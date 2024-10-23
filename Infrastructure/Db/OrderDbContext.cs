@@ -7,6 +7,7 @@ namespace Infrastructure.Db
     public class OrderDbContext : DbContext, IDbContext
     {
         public DbSet<Order> Orders { get; set; }
+        public DbSet<District> Districts { get; set; }
 
         public OrderDbContext(DbContextOptions options) : base(options)
         {
