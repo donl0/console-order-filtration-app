@@ -7,12 +7,10 @@ namespace Infrastructure.Repositories
     public class DistrictRepository : IDistrictRepository
     {
         private readonly IDbContext _dbContext;
-        private readonly CancellationToken _token;
 
-        public DistrictRepository(IDbContext dbContext, CancellationToken token)
+        public DistrictRepository(IDbContext dbContext)
         {
             _dbContext = dbContext;
-            _token = token;
         }
 
         public async Task<bool> CheckIfExistAsync(string name)
@@ -20,10 +18,10 @@ namespace Infrastructure.Repositories
             return await _dbContext.Districts.AnyAsync(d => d.Name == name);
         }
 
-        public async Task CreateAsync(District district)
+        public async Task CreateAsync(District district, CancellationToken cancellationToken)
         {
             await _dbContext.Districts.AddAsync(district);
-            await _dbContext.SaveChangesAsync(_token);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<District> GetByNameAsync(string name)

@@ -16,9 +16,9 @@ namespace OrderExcecutor.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<long>> Post([FromBody] CreateOrderDTO createOrderDto)
+        public async Task<ActionResult<long>> Post([FromBody] CreateOrderDTO createOrderDto, CancellationToken cancellationToken)
         {
-            long id = await _createOrderService.CreateAsync(createOrderDto);
+            long id = await _createOrderService.CreateAsync(createOrderDto, cancellationToken);
 
             return Ok(id);
         }

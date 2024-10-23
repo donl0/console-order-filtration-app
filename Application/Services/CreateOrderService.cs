@@ -15,7 +15,7 @@ namespace Application.Services
             _districtRepository = districtRepository;
         }
 
-        public async Task<long> CreateAsync(CreateOrderDTO createOrderDto)
+        public async Task<long> CreateAsync(CreateOrderDTO createOrderDto, CancellationToken cancellationToken)
         {
             District district;
 
@@ -23,7 +23,7 @@ namespace Application.Services
             {
                 district = new District(createOrderDto.DistrictName);
 
-                await _districtRepository.CreateAsync(district);
+                await _districtRepository.CreateAsync(district, cancellationToken);
             }
             else
             {
