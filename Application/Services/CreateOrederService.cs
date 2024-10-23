@@ -3,7 +3,7 @@ using Domain.Models;
 
 namespace Application.Services
 {
-    public sealed class CreateOrederService
+    public sealed class CreateOrederService : ICreateOrederService
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IDistrictRepository _districtRepository;
@@ -14,7 +14,8 @@ namespace Application.Services
             _districtRepository = districtRepository;
         }
 
-        public async void CreateAsync(CreateOrderDTO createOrderDto) {
+        public async void CreateAsync(CreateOrderDTO createOrderDto)
+        {
             District district;
 
             if (await _districtRepository.CheckIfExistAsync(createOrderDto.DistrictName) == false)
