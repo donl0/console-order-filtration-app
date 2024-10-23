@@ -30,9 +30,11 @@ namespace Application.Services
                 district = await _districtRepository.GetByNameAsync(createOrderDto.DistrictName);
             }
 
-            Order order = new Order(createOrderDto.UniqueNumber, createOrderDto.Weight, createOrderDto.DeliveryTime, district);
+            DateTime utfTime = DateTime.SpecifyKind(createOrderDto.DeliveryTime, DateTimeKind.Utc);
 
-            await _orderRepository.CreateAsync(order);
+            Order order = new Order(createOrderDto.UniqueNumber, createOrderDto.Weight, utfTime, district);
+
+            await _orderRepository.CreateAsync(order, cancellationToken);
 
             return order.Id;
         }

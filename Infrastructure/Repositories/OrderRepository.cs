@@ -13,9 +13,11 @@ namespace Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task CreateAsync(Order order)
+        public async Task CreateAsync(Order order, CancellationToken cancellationToken)
         {
             await _dbContext.Orders.AddAsync(order);
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<Order>> GetCloseOrdersInHalfHourAsync(DateTime deliveryTime, string districtName)
