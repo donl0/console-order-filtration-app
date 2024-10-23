@@ -2,8 +2,8 @@
 {
     public interface IDistrictRepository
     {
-        public void CreateAsync(District district);
-        public District GetByNameAsync(string name);
-        public bool CheckIfExist(string name);
+        public Task CreateAsync(District district);
+        public Task<District> GetByNameAsync(string name);
+        public Task<bool> CheckIfExistAsync(string name);
     }
 }
