@@ -15,7 +15,7 @@ namespace Application.Services
             _districtRepository = districtRepository;
         }
 
-        public async void CreateAsync(CreateOrderDTO createOrderDto)
+        public async Task<long> CreateAsync(CreateOrderDTO createOrderDto)
         {
             District district;
 
@@ -33,6 +33,8 @@ namespace Application.Services
             Order order = new Order(createOrderDto.UniqueNumber, createOrderDto.Weight, createOrderDto.DeliveryTime, district);
 
             await _orderRepository.CreateAsync(order);
+
+            return order.Id;
         }
     }
 }

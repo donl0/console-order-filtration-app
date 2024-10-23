@@ -16,11 +16,11 @@ namespace OrderExcecutor.Controllers
         }
 
         [HttpPost]
-        public async void Post([FromBody] CreateOrderDTO createOrderDto)
+        public async Task<ActionResult<long>> Post([FromBody] CreateOrderDTO createOrderDto)
         {
-            await _createOrderService.CreateAsync(createOrderDto);
+            long id = await _createOrderService.CreateAsync(createOrderDto);
 
-            return Ok();
+            return Ok(id);
         }
     }
 }
