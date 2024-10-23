@@ -1,4 +1,4 @@
-﻿using Domain.Models;
+﻿using Domain.Models.Orders;
 using Infrastructure.Db;
 using Infrastructure.Db.Interface;
 using Infrastructure.Repositories;

@@ -1,6 +1,6 @@
 ﻿using Application.DTO;
 using Application.Interfaces;
-using Domain.Models;
+using Domain.Models.Orders;
 
 namespace Application.Services
 {

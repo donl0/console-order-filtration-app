@@ -1,4 +1,4 @@
-﻿namespace Domain.Models
+﻿namespace Domain.Primitives
 {
     public class Entity
     {

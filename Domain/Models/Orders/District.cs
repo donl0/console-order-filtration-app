@@ -1,6 +1,7 @@
 ﻿using Domain.Exceptions;
+using Domain.Primitives;
 
-namespace Domain.Models
+namespace Domain.Models.Orders
 {
     public class District : Entity
     {

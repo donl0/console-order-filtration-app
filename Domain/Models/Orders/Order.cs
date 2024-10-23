@@ -1,12 +1,13 @@
 ﻿using Domain.Exceptions;
+using Domain.Primitives;
 
-namespace Domain.Models
+namespace Domain.Models.Orders
 {
     public class Order : Entity
     {
         public Guid UniqueNumber { get; private set; }
         public int Weight { get; private set; }
-        public DateTime DeliveryTime{ get; private set; }
+        public DateTime DeliveryTime { get; private set; }
         public District District { get; private set; }
 
         public Order() { }

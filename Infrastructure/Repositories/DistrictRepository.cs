@@ -1,4 +1,4 @@
-﻿using Domain.Models;
+﻿using Domain.Models.Orders;
 using Infrastructure.Db.Interface;
 using Microsoft.EntityFrameworkCore;
 
