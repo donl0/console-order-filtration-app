@@ -2,7 +2,7 @@
 {
     public interface IDistrictRepository
     {
-        public void Add(District district);
+        public void CreateAsync(District district);
         public District GetByNameAsync(string name);
         public bool CheckIfExist(string name);
     }

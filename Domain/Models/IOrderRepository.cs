@@ -2,7 +2,7 @@
 {
     internal interface IOrderRepository
     {
-        public void AddAsync(Order order);
+        public void CreateAsync(Order order);
         public IEnumerable<Order> GetCloseOrdersInHalfHourAsync(DateTime deliveryTime, string districtName);
     }
 }
