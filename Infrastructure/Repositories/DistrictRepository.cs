@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-    public class DistrictRepository : IDistrictRepository
+    public sealed class DistrictRepository : IDistrictRepository
     {
         private readonly IDbContext _dbContext;
 

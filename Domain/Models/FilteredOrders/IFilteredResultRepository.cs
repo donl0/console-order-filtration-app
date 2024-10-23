@@ -2,7 +2,7 @@
 {
     public interface IFilteredResultRepository
     {
-        public Task<FilteredResult> GetFilteredResultByDistrictNameAsync();
-        public Task<long> CreateAsync(FilteredResult value); 
+        public Task<FilteredResult> GetFilteredResultByDistrictNameAsync(string districtName);
+        public Task<long> CreateAsync(FilteredResult value, CancellationToken cancellationToken); 
     }
 }
