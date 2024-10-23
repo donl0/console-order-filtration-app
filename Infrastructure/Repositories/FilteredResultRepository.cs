@@ -23,6 +23,15 @@ namespace Infrastructure.Repositories
             return value.Id;
         }
 
+        public async Task<List<FilteredResult>> GetAllAsync()
+        {
+            List<FilteredResult> result = await _dbContext.FilteredResults
+                .Include(fr => fr.District)
+                .Include(fr => fr.Orders)
+                .ToListAsync();
+            return result;
+        }
+
         public async Task<FilteredResult> GetFilteredResultByDistrictNameAsync(string districtName)
         {
             FilteredResult result = await _dbContext.FilteredResults

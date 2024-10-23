@@ -19,6 +19,13 @@ namespace Application.Services
             _districtRepository = districtRepository;
         }
 
+        public async Task<List<FilteredResult>> GetAllAsync()
+        {
+            List<FilteredResult> results = await _filteredResultRepository.GetAllAsync();
+
+            return results;
+        }
+
         public async Task<List<Order>> Filter(FilterOrdersDTO filterOrdersDTO, CancellationToken cancellationToken)
         {
             DateTime utfTime = DateTime.SpecifyKind(filterOrdersDTO.TimeAfterFirstOrder, DateTimeKind.Utc);

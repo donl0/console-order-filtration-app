@@ -1,6 +1,8 @@
 ﻿using Application.DTO;
 using Application.Interfaces;
+using Domain.Models.FilteredOrders;
 using Domain.Models.Orders;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace OrderExcecutor.Controllers
@@ -16,13 +18,20 @@ namespace OrderExcecutor.Controllers
             _filterOrdersServise = filterOrdersServise;
         }
 
-        [HttpGet()]
-        public async Task<ActionResult<List<Order>>> Get(DateTime timeAfterFirstOrder, string districtName, CancellationToken cancellationToken)
+        [HttpPost("initialize")]
+        public async Task<ActionResult<List<Order>>> InitializeFilteringAsync(DateTime timeAfterFirstOrder, string districtName, CancellationToken cancellationToken)
         {
             FilterOrdersDTO dto = new FilterOrdersDTO { TimeAfterFirstOrder = timeAfterFirstOrder, DistrictName = districtName };
             List<Order> orders = await _filterOrdersServise.Filter(dto, cancellationToken);
 
             return Ok(orders);
+        }
+
+        [HttpGet()]
+        public async Task<IActionResult> GetAllFilteredResults()
+        {
+            List<FilteredResult> results = await _filterOrdersServise.GetAllAsync();
+            return Ok(results);
         }
     }
 }
