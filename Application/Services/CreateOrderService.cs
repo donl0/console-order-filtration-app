@@ -4,12 +4,12 @@ using Domain.Models;
 
 namespace Application.Services
 {
-    public sealed class CreateOrederService : ICreateOrederService
+    public sealed class CreateOrderService : ICreateOrederService
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IDistrictRepository _districtRepository;
 
-        public CreateOrederService(IOrderRepository orderRepository, IDistrictRepository districtRepository)
+        public CreateOrderService(IOrderRepository orderRepository, IDistrictRepository districtRepository)
         {
             _orderRepository = orderRepository;
             _districtRepository = districtRepository;
