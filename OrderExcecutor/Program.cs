@@ -1,5 +1,6 @@
 using Application;
 using Infrastructure;
+using OrderExcecutor.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<GlobalExeptionMiddleware>();
 
 app.UseHttpsRedirection();
 
