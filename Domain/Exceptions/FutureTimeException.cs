@@ -3,7 +3,7 @@
     internal class FutureTimeException : DomainException
     {
         public FutureTimeException(string time)
- : base($"Delivery time: {time} can not be int the future.")
+ : base($"Delivery time: {time} can not be in the past.")
         {
         }
     }
