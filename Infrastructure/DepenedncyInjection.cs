@@ -1,5 +1,7 @@
-﻿using Infrastructure.Db;
+﻿using Domain.Models;
+using Infrastructure.Db;
 using Infrastructure.Db.Interface;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,9 @@ namespace Infrastructure
             {
                 options.UseNpgsql(connectionString);
             });
+
+            services.AddTransient<IDistrictRepository, DistrictRepository>();
+            services.AddTransient<IOrderRepository, OrderRepository>();
 
             return services;
         }
