@@ -4,6 +4,6 @@ namespace Application.Interfaces
 {
     public interface ICreateOrederService
     {
-        void CreateAsync(CreateOrderDTO createOrderDto);
+        Task CreateAsync(CreateOrderDTO createOrderDto);
     }
 }
