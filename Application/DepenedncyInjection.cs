@@ -10,6 +10,7 @@ namespace Application
         {
             services.AddTransient<ICreateOrederService, CreateOrderService>();
             services.AddTransient<IFilterOrdersServise, FilterOrdersServise>();
+
             return services;
         }
     }

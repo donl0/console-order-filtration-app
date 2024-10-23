@@ -1,9 +1,10 @@
 ﻿using Application.DTO;
+using Domain.Models.Orders;
 
 namespace Application.Interfaces
 {
     public interface IFilterOrdersServise
     {
-        Task<long> Filter(FilterOrdersDTO filterOrdersDTO, CancellationToken cancellationToken);
+        Task<List<Order>> Filter(FilterOrdersDTO filterOrdersDTO, CancellationToken cancellationToken);
     }
 }

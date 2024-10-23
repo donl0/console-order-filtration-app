@@ -1,5 +1,6 @@
 ﻿using Application.DTO;
 using Application.Exceptions;
+using Application.Interfaces;
 using Domain.Models.FilteredOrders;
 using Domain.Models.Orders;
 
@@ -18,7 +19,7 @@ namespace Application.Services
             _districtRepository = districtRepository;
         }
 
-        public async Task<long> Filter(FilterOrdersDTO filterOrdersDTO, CancellationToken cancellationToken)
+        public async Task<List<Order>> Filter(FilterOrdersDTO filterOrdersDTO, CancellationToken cancellationToken)
         {
             List<Order> closestOrders = await _orderRepository.GetCloseOrdersInHalfHourAsync(filterOrdersDTO.TimeAfterFirstOrder, filterOrdersDTO.DistrictName);
 
@@ -26,15 +27,15 @@ namespace Application.Services
 
             if (filteredResult == null)
             {
-                long id = await Create(filteredResult, filterOrdersDTO, _districtRepository, closestOrders, cancellationToken);
+                await Create(filteredResult, filterOrdersDTO, _districtRepository, closestOrders, cancellationToken);
 
-                return id;
+                return closestOrders;
             }
             else
             {
-                long id = await Update(filteredResult, closestOrders, cancellationToken);
+                await Update(filteredResult, closestOrders, cancellationToken);
 
-                return id;
+                return closestOrders;
             }
         }
 
