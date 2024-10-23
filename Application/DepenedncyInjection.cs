@@ -9,7 +9,7 @@ namespace Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddTransient<ICreateOrederService, CreateOrderService>();
-
+            services.AddTransient<IFilterOrdersServise, FilterOrdersServise>();
             return services;
         }
     }

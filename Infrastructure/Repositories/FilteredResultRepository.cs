@@ -1,6 +1,8 @@
 ﻿using Domain.Models.FilteredOrders;
+using Domain.Models.Orders;
 using Infrastructure.Db.Interface;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
 
 namespace Infrastructure.Repositories
 {
@@ -28,6 +30,14 @@ namespace Infrastructure.Repositories
                 .FirstOrDefaultAsync(fr => fr.District.Name == districtName);
 
             return result;
+        }
+
+        public async Task<long> UpdateAsync(FilteredResult filteredResult, CancellationToken cancellationToken)
+        {
+            _dbContext.FilteredResults.Update(filteredResult);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            return filteredResult.Id;
         }
     }
 }

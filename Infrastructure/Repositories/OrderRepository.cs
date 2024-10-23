@@ -20,7 +20,7 @@ namespace Infrastructure.Repositories
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<Order>> GetCloseOrdersInHalfHourAsync(DateTime deliveryTime, string districtName)
+        public async Task<List<Order>> GetCloseOrdersInHalfHourAsync(DateTime deliveryTime, string districtName)
         {
             var startTime = deliveryTime;
             var endTime = deliveryTime.AddMinutes(30);
