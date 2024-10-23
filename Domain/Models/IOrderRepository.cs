@@ -1,8 +1,8 @@
 ﻿namespace Domain.Models
 {
-    internal interface IOrderRepository
+    public interface IOrderRepository
     {
-        public void CreateAsync(Order order);
-        public IEnumerable<Order> GetCloseOrdersInHalfHourAsync(DateTime deliveryTime, string districtName);
+        public Task CreateAsync(Order order);
+        public Task<IEnumerable<Order>> GetCloseOrdersInHalfHourAsync(DateTime deliveryTime, string districtName);
     }
 }
