@@ -5,21 +5,21 @@ namespace UI.StateMachine.Transitions
 {
     internal class NegativeValidationTransition : BaseTransition
     {
-        private readonly IValidatableState _state;
+        private readonly IValidatableState _stateToTransit;
 
-        public NegativeValidationTransition(BaseTransition nextTransition, IValidatableState state) : base(nextTransition)
+        public NegativeValidationTransition(BaseTransition nextTransition, IValidatableState stateToTransit) : base(nextTransition)
         {
-            _state = state;
+            _stateToTransit = stateToTransit;
         }
 
         public override BaseState GetStateToSwitch()
         {
-            return (BaseState)_state;
+            return (BaseState)_stateToTransit;
         }
 
         protected override bool CheckIsNeedInternalTransition()
         {
-            return _state.ValidationIsValid == false;
+            return _stateToTransit.ValidationIsValid == false;
         }
     }
 }
