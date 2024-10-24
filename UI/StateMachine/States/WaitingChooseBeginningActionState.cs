@@ -9,7 +9,7 @@ namespace UI.StateMachine.States
         {
         }
 
-        public override void ExecuteInput()
+        public override async Task ExecuteInput()
         {
             Console.WriteLine("Press 1 to create order\n" +
                               "Press 2 to filter orders");

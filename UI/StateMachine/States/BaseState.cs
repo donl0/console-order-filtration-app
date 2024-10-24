@@ -11,6 +11,6 @@ namespace UI.StateMachine.States
             Bag = bag;
         }
 
-        public abstract void ExecuteInput();
+        public abstract Task ExecuteInput();
     }
 }
