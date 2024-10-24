@@ -1,4 +1,5 @@
-﻿using Domain.Models.FilteredOrders;
+﻿using ApiClient.Models;
+using Domain.Models.FilteredOrders;
 using Domain.Models.Orders;
 using System.Text;
 using System.Text.Json;
@@ -16,7 +17,7 @@ namespace ApiClient
             _baseUri = baseUri;
         }
 
-        public async Task<List<Order>> InitializeFilteringAsync(DateTime timeAfterFirstOrder, string districtName, CancellationToken cancellationToken)
+        public async Task<List<OrderResponce>> InitializeFilteringAsync(DateTime timeAfterFirstOrder, string districtName, CancellationToken cancellationToken)
         {
             var uri = $"{_baseUri}/api/FilteredResults/initialize";
             var requestBody = new
@@ -31,7 +32,7 @@ namespace ApiClient
             response.EnsureSuccessStatusCode();
 
             var responseBody = await response.Content.ReadAsStringAsync();
-            var orders = JsonSerializer.Deserialize<List<Order>>(responseBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var orders = JsonSerializer.Deserialize<List<OrderResponce>>(responseBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             return orders;
         }
