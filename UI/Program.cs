@@ -1,9 +1,9 @@
 ﻿using UI.StateMachine;
-using UI.StateMachine.TransitionMapGenerator;
+using UI.StateMachine.Payloads.InputData;
 
 public static class Program { 
     public static void Main(string[] args) {
-        StateMachine UI = new StateMachine(new ReflectionTransitionMapGenerator());
+        StateMachine UI = new StateMachine(new InputDataBag());
         UI.Start();
     }
 }

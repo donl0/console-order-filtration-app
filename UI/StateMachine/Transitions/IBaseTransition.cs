@@ -1,7 +1,11 @@
-﻿namespace UI.StateMachine.Transitions
+﻿using UI.StateMachine.States;
+
+namespace UI.StateMachine.Transitions
 {
     internal interface IBaseTransition
     {
-        public bool TryTransit();
+        public abstract BaseState GetStateToSwitch();
+
+        public abstract bool CheckIsNeedTransit();
     }
 }

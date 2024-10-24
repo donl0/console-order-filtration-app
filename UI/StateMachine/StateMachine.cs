@@ -1,80 +1,62 @@
 ﻿using UI.StateMachine.Payloads.InputData;
 using UI.StateMachine.States;
 using UI.StateMachine.States.ValidateStates;
-using UI.StateMachine.StateSwitcher;
-using UI.StateMachine.TransitionMapGenerator;
 using UI.StateMachine.Transitions;
 
 namespace UI.StateMachine
 {
-    internal sealed class StateMachine : IStateSwitcher
+    internal sealed class StateMachine
     {
-        private readonly ITransitionMapGenerator _transitionMapGenerator;
+        private readonly IInputDataBag _bag;
 
         private BaseState _currentState;
 
-        private List<ITransitionableBaseState> _states = new List<ITransitionableBaseState>();
-        private List<IBaseTransition> _transitionsContainer = new List<IBaseTransition>();
-        private Dictionary<ITransitionableBaseState, List<IBaseTransition>> _transitionsMap = new Dictionary<ITransitionableBaseState, List<IBaseTransition>>();
+        private Dictionary<BaseState, List<IBaseTransition>> _transitionsMap = new Dictionary<BaseState, List<IBaseTransition>>();
 
-        public StateMachine(ITransitionMapGenerator transitionMapGenerator)
+        public StateMachine(IInputDataBag bag)
         {
-            _transitionMapGenerator = transitionMapGenerator;
+            _bag = bag;
 
             Init();
         }
 
-        public void Init() { 
-            IInputDataBag bag = new InputDataBag();
+        private void Init()
+        {
+            BaseState startState = new WaitingChooseBeginningActionState(_bag);
+
+            _currentState = startState;
+
+            BaseState inputOrderNumberState = new InputOrderNumberState(_bag);
+
+            IBaseTransition positiveStartTransitionFirstInput = new PositiveValidationTransition(new EqualLastInputTransition<string>(null, startState, _bag, "1"), inputOrderNumberState, (IValidatableState)startState);
+            IBaseTransition negativeStartTransition = new NegativeValidationTransition(null, (IValidatableState)startState);
 
 
-            IValidatableState startState = new WaitingChooseBeginningActionState(bag);
+            IBaseTransition positiveInputOrderNumberTransition = new PositiveValidationTransition(null, startState, (IValidatableState)inputOrderNumberState);
+            IBaseTransition negativeInputOrderNumberTransition = new NegativeValidationTransition(null, (IValidatableState)inputOrderNumberState);
 
-            _currentState = (BaseState)startState;
-
-            _states.Add(_currentState);
-
-            IValidatableState inputOrderNumberState = new InputOrderNumberState(bag);
-            _states.Add(inputOrderNumberState);
-
-            IBaseTransition positiveStartTransition = new OnPositiveValidationTransition(this, startState, inputOrderNumberState);
-            IBaseTransition onNegativeStartTransition = new RetryOnNegativeValidationTransition(this, startState, inputOrderNumberState);
-
-            _transitionsContainer.Add(positiveStartTransition);
-            _transitionsContainer.Add(onNegativeStartTransition);
-
-            IBaseTransition positiveInputOrderNumberTransition = new OnPositiveValidationTransition(this, inputOrderNumberState, startState);
-            IBaseTransition negativeInputOrderNumberTransition = new RetryOnNegativeValidationTransition(this, inputOrderNumberState, startState);
-
-            _transitionsContainer.Add(positiveInputOrderNumberTransition);
-            _transitionsContainer.Add(negativeInputOrderNumberTransition);
-
-            _transitionsMap = _transitionMapGenerator.Generate(_states, _transitionsContainer,  this);
+            _transitionsMap[startState] = new List<IBaseTransition>() { positiveStartTransitionFirstInput, negativeStartTransition };
+            _transitionsMap[inputOrderNumberState] = new List<IBaseTransition>() { positiveInputOrderNumberTransition, negativeInputOrderNumberTransition };
         }
 
-        public void Start() {
+        public void Start()
+        {
             while (true)
             {
                 _currentState.ExecuteInput();
-                if (_transitionsMap.TryGetValue(_currentState, out var stateTransitions))
+
+                if (_transitionsMap[_currentState].Count > 0)
                 {
-                    foreach (var transition in stateTransitions)
+                    foreach (var transition in _transitionsMap[_currentState])
                     {
-                        if (transition.TryTransit())
+                        if (transition.CheckIsNeedTransit())
                         {
+                            _currentState = transition.GetStateToSwitch();
                             break;
                         }
                     }
                 }
             }
-        }
-
-        public void SwithState(ITransitionableBaseState transitTo)
-        {
-            var value = _states.Find( s => s ==  transitTo);
-
-            _currentState = (BaseState)value;
-
         }
     }
 }

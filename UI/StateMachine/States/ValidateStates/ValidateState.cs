@@ -8,14 +8,14 @@ namespace UI.StateMachine.States.ValidateStates
         {
         }
 
-        public bool IsValid { get; private set; }
+        public bool ValidationIsValid { get; private set; }
 
         protected void SetIsValid() { 
-            IsValid = true;
+            ValidationIsValid = true;
         }
 
         protected void SetInvalid() { 
-            IsValid = false;
+            ValidationIsValid = false;
         }
     }
 }

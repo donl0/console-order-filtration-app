@@ -2,6 +2,6 @@
 {
     internal interface IValidatableState : ITransitionableBaseState
     {
-        public bool IsValid { get; }
+        public bool ValidationIsValid { get; }
     }
 }

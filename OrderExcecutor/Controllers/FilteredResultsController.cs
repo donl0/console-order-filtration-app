@@ -2,7 +2,6 @@
 using Application.Interfaces;
 using Domain.Models.FilteredOrders;
 using Domain.Models.Orders;
-using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace OrderExcecutor.Controllers
