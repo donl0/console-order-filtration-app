@@ -3,6 +3,7 @@ using UI.StateMachine.Payloads.InputData;
 using UI.StateMachine.States;
 using UI.StateMachine.States.ValidateStates;
 using UI.StateMachine.Transitions;
+using UI.Utils;
 
 namespace UI.StateMachine
 {
@@ -10,15 +11,16 @@ namespace UI.StateMachine
     {
         private readonly IInputDataBag _bag;
         private readonly IOrderExcecutorApiClient _apiClient;
-
+        private readonly IOrderPrinter _orderPrinter;
         private BaseState _currentState;
 
         private Dictionary<BaseState, List<IBaseTransition>> _transitionsMap = new Dictionary<BaseState, List<IBaseTransition>>();
 
-        public StateMachine(IInputDataBag bag, IOrderExcecutorApiClient apiClient)
+        public StateMachine(IInputDataBag bag, IOrderExcecutorApiClient apiClient, IOrderPrinter orderPrinter)
         {
             _bag = bag;
             _apiClient = apiClient;
+            _orderPrinter = orderPrinter;
 
             Init();
         }
@@ -56,7 +58,24 @@ namespace UI.StateMachine
 
             IBaseTransition onOrderEnd = new OnEndTransition(startState);
 
-            _transitionsMap[startState] = new List<IBaseTransition>() { positiveStartTransitionFirstInput, negativeStartTransition };
+            BaseState inputDistrictForFilter = new InputDistrictState(_bag);
+
+            BaseState inputDateForFilter = new InputOrderDateState(_bag);
+
+            BaseState filterOrders = new FilterOrdersState(_bag, _apiClient, _orderPrinter);
+
+            IBaseTransition positiveStartTransitionForFilter = new PositiveValidationTransition(new EqualLastInputTransition<string>(null, startState, _bag, "2"), inputDistrictForFilter, (IValidatableState)startState);
+
+            IBaseTransition positiveFromDistrictToDateForFilter = new PositiveValidationTransition(null, inputDateForFilter, (IValidatableState)inputDistrictForFilter);
+            IBaseTransition negativeinputDistrictForFilter = new NegativeValidationTransition(null, (IValidatableState)inputDistrictForFilter);
+
+            IBaseTransition positiveFromDateToFilter = new PositiveValidationTransition(null, filterOrders, (IValidatableState)inputDateForFilter);
+            IBaseTransition negativeDistrictForFilter = new NegativeValidationTransition(null, (IValidatableState)inputDateForFilter);
+
+            IBaseTransition onFilterEnd = new OnEndTransition(startState);
+
+
+            _transitionsMap[startState] = new List<IBaseTransition>() { positiveStartTransitionFirstInput, negativeStartTransition, positiveStartTransitionForFilter };
             _transitionsMap[inputOrderNumberState] = new List<IBaseTransition>() { positiveInputOrderNumberTransition, negativeInputOrderNumberTransition };
             _transitionsMap[inputWeightForCreateOrder] = new List<IBaseTransition>() { positiveInputWeightForCreateOrder, negativeInputWeightForCreateOrder };
             _transitionsMap[inputDistrictForCreateOrder] = new List<IBaseTransition>() { positiveDistrictForCreateOrder, negativeDistrictForCreateOrder };
@@ -64,6 +83,10 @@ namespace UI.StateMachine
 
             _transitionsMap[createOrderState] = new List<IBaseTransition>() { onOrderEnd };
 
+            _transitionsMap[inputDistrictForFilter] = new List<IBaseTransition>() { positiveFromDistrictToDateForFilter, negativeinputDistrictForFilter };
+            _transitionsMap[inputDateForFilter] = new List<IBaseTransition>() { positiveFromDateToFilter, negativeDistrictForFilter };
+
+            _transitionsMap[filterOrders] = new List<IBaseTransition>() { onFilterEnd };
         }
 
         public async Task Start()
