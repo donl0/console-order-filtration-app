@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace ApiClient
 {
-    public class OrderExcecutorApiClient
+    public class OrderExcecutorApiClient : IOrderExcecutorApiClient
     {
         private readonly HttpClient _httpClient;
         private readonly string _baseUri;
@@ -13,7 +13,7 @@ namespace ApiClient
         public OrderExcecutorApiClient(HttpClient httpClient, string baseUri)
         {
             _httpClient = httpClient;
-            _baseUri = "http://localhost:8080";
+            _baseUri = baseUri;
         }
 
         public async Task<List<Order>> InitializeFilteringAsync(DateTime timeAfterFirstOrder, string districtName, CancellationToken cancellationToken)
@@ -39,17 +39,19 @@ namespace ApiClient
         public async Task<long> CreateOrderAsync(Guid uniqueNumber, int weight, DateTime deliveryTime, string districtName, CancellationToken cancellationToken)
         {
             var uri = $"{_baseUri}/api/Orders";
+
             var requestBody = new
             {
-                uniqueNumber = uniqueNumber,
-                weight = weight,
-                deliveryTime = deliveryTime,
-                districtName = districtName
+                UniqueNumber = uniqueNumber,
+                Weight = weight,
+                DeliveryTime = deliveryTime,
+                DistrictName = districtName
             };
 
             var content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(uri, content, cancellationToken);
+
             response.EnsureSuccessStatusCode();
 
             var responseBody = await response.Content.ReadAsStringAsync();

@@ -16,10 +16,8 @@ namespace OrderExcecutor.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<long>> CreateOrder(Guid uniqueNumber, int weight, DateTime deliveryTime, string districtName, CancellationToken cancellationToken)
+        public async Task<ActionResult<long>> CreateOrder([FromBody] CreateOrderDTO orderDTO, CancellationToken cancellationToken)
         {
-            CreateOrderDTO orderDTO = new CreateOrderDTO { UniqueNumber = uniqueNumber, Weight = weight, DeliveryTime = deliveryTime, DistrictName = districtName };
-
             long id = await _createOrderService.CreateAsync(orderDTO, cancellationToken);
 
             return Ok(id);

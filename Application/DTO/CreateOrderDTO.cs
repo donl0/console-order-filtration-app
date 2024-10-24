@@ -2,9 +2,9 @@
 {
     public class CreateOrderDTO
     {
-        public Guid UniqueNumber;
-        public int Weight;
-        public DateTime DeliveryTime;
-        public string DistrictName;
+        public Guid UniqueNumber { get; set; }
+        public int Weight { get; set; }
+        public DateTime DeliveryTime { get; set; }
+        public string DistrictName { get; set; }
     }
 }

@@ -18,9 +18,8 @@ namespace OrderExcecutor.Controllers
         }
 
         [HttpPost("initialize")]
-        public async Task<ActionResult<List<Order>>> InitializeFilteringAsync(DateTime timeAfterFirstOrder, string districtName, CancellationToken cancellationToken)
+        public async Task<ActionResult<List<Order>>> InitializeFilteringAsync([FromBody] FilterOrdersDTO dto, CancellationToken cancellationToken)
         {
-            FilterOrdersDTO dto = new FilterOrdersDTO { TimeAfterFirstOrder = timeAfterFirstOrder, DistrictName = districtName };
             List<Order> orders = await _filterOrdersServise.Filter(dto, cancellationToken);
 
             return Ok(orders);
