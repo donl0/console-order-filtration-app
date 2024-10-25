@@ -8,6 +8,18 @@ docker compose up --detach
 docker attach {UI docker id}
 ```
 
+## Libs
+- [Ef Core](https://github.com/donl0/console-order-filtration-app/blob/main/Infrastructure/Db/OrderDbContext.cs)
+- Serilog for collecting logs.
+- Postgresql
+
+## Backend
+- Made with DDD.
+- [Web Api Controllers](https://github.com/donl0/console-order-filtration-app/tree/main/OrderExcecutor/Controllers).
+- [Repositories](https://github.com/donl0/console-order-filtration-app/tree/main/Infrastructure/Repositories)
+- [Services](https://github.com/donl0/console-order-filtration-app/tree/main/Application/Services)
+- [Models](https://github.com/donl0/console-order-filtration-app/tree/main/Domain/Models)
+
 ## UI Layer
 Used [Machine State](https://github.com/donl0/console-order-filtration-app/blob/main/UI/StateMachine/StateMachine.cs) pattern to describe rules for UI comminication.
 
