@@ -46,9 +46,9 @@ app.MapControllers();
 
 app.UseCors(x =>
 {
-    x.WithHeaders().AllowAnyHeader();
-    x.WithOrigins("http://localhost:6364");
-    x.WithMethods().AllowAnyMethod();
+    x.AllowAnyOrigin()
+     .AllowAnyHeader()
+     .AllowAnyMethod();
 });
 
 app.Run();

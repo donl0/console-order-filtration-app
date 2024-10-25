@@ -8,7 +8,7 @@ public static class Program {
         HttpClientHandler handler = new HttpClientHandler();
         handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
 
-        StateMachine UI = new StateMachine(new InputDataBag(), new OrderExcecutorApiClient(new HttpClient(handler), "https://localhost:7065"), new OrderPrinter());
+        StateMachine UI = new StateMachine(new InputDataBag(), new OrderExcecutorApiClient(new HttpClient(handler), "http://api:8080"), new OrderPrinter());
         await UI.Start();
     }
 }
