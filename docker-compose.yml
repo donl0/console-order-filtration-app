@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: OrderService
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+
+  api:
+    build:
+      context: .
+      dockerfile: OrderExcecutor/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      DbConnection: "Host=db;Database=OrderService;Username=postgres;Password=12345"
+    depends_on:
+      - db
+    ports:
+      - "7065:8080"
+    networks:
+      - backend
+
+  ui:
+    build:
+      context: .
+      dockerfile: UI/Dockerfile
+    environment:
+      ApiBaseUri: "http://api:8080"
+    depends_on:
+      - api
+    networks:
+      - backend
+    tty: true
+    stdin_open: true
+volumes:
+  pgdata:
+
+networks:
+  backend:
+
