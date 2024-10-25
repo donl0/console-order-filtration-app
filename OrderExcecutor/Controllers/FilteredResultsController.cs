@@ -11,15 +11,19 @@ namespace OrderExcecutor.Controllers
     public class FilteredResultsController : ControllerBase
     {
         private readonly IFilterOrdersServise _filterOrdersServise;
+        private readonly ILogger<FilteredResultsController> _logger;
 
-        public FilteredResultsController(IFilterOrdersServise filterOrdersServise)
+        public FilteredResultsController(IFilterOrdersServise filterOrdersServise, ILogger<FilteredResultsController> logger)
         {
             _filterOrdersServise = filterOrdersServise;
+            _logger = logger;
         }
 
         [HttpPost("initialize")]
         public async Task<ActionResult<List<Order>>> InitializeFilteringAsync([FromBody] FilterOrdersDTO dto, CancellationToken cancellationToken)
         {
+            _logger.LogInformation("InitializeFiltering request received with data: {@OrderDto}", dto);
+
             List<Order> orders = await _filterOrdersServise.Filter(dto, cancellationToken);
 
             return Ok(orders);
