@@ -1,6 +1,7 @@
 using Application;
 using Infrastructure;
 using OrderExcecutor.Middleware;
+using OrderExcecutor.Migrator;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +27,8 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
 var app = builder.Build();
+
+await app.Services.MakeMigrationsAsync();
 
 if (app.Environment.IsDevelopment())
 {
