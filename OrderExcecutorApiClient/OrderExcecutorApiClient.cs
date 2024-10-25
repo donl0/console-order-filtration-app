@@ -29,7 +29,12 @@ namespace ApiClient
             var content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(uri, content, cancellationToken);
-            response.EnsureSuccessStatusCode();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException($"Server returned an error: {errorContent}");
+            }
 
             var responseBody = await response.Content.ReadAsStringAsync();
             var orders = JsonSerializer.Deserialize<List<OrderResponce>>(responseBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
@@ -52,8 +57,12 @@ namespace ApiClient
             var content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(uri, content, cancellationToken);
-
-            response.EnsureSuccessStatusCode();
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException($"Server returned an error: {errorContent}");
+            }
 
             var responseBody = await response.Content.ReadAsStringAsync();
             var orderId = JsonSerializer.Deserialize<long>(responseBody);
@@ -65,7 +74,6 @@ namespace ApiClient
         {
             var uri = $"{_baseUri}/api/FilteredResults";
             var response = await _httpClient.GetAsync(uri, cancellationToken);
-            response.EnsureSuccessStatusCode();
 
             var responseBody = await response.Content.ReadAsStringAsync();
             var results = JsonSerializer.Deserialize<List<FilteredResult>>(responseBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });

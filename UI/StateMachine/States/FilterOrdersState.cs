@@ -31,6 +31,10 @@ namespace UI.StateMachine.States
 
                 _orderPrinter.Print(result);
             }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Server error: {ex.Message}");
+            }
             catch (Exception ex)
             {
                 Console.WriteLine("Error during filtering");

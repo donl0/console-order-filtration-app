@@ -19,10 +19,15 @@ namespace UI.StateMachine.States
             string district = Bag.GetPayload<DistrictPayload>().Payload;
             int weight = Bag.GetPayload<WeightPayload>().Payload;
             DateTime time = Bag.GetPayload<TimeDeliveryPayload>().Payload;
+
             try {
                 var result = await _apiClient.CreateOrderAsync(number, weight, time, district, new CancellationToken());
 
                 Console.WriteLine("Order create sucess!");
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Server error: {ex.Message}");
             }
             catch (Exception ex)
             {
